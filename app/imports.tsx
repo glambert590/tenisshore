@@ -1,13 +1,14 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Alert, Image, Text, View } from "react-native";
-import { useFocusEffect } from "expo-router";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import * as Picker from "expo-image-picker";
 import * as FS from "expo-file-system/legacy";
 import { uuid } from "expo-modules-core";
 import { nativeApi } from "../modules/tenisshore-native";
 import { useCatalog } from "../src/data/context";
 import type { ImportDraft, ProductPatch } from "../src/domain/types";
-import { normalizeCode, parseCard } from "../src/domain/catalog";
+import { normalizeCode } from "../src/domain/catalog";
+import { pickAndImportImages } from "../src/domain/importBatch";
 import {
   approveCardPatch,
   draftPriceText,
@@ -29,80 +30,68 @@ import {
 
 export default function ImportsScreen() {
   const repo = useCatalog();
+  const { autoPick } = useLocalSearchParams<{ autoPick?: string }>();
+  const openedInitialPicker = useRef(false);
   const [drafts, setDrafts] = useState<ImportDraft[]>([]),
     [activeId, setActiveId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false),
     [progress, setProgress] = useState(""),
     [crop, setCrop] = useState(false);
-  useFocusEffect(
-    useCallback(() => {
-      repo.listDrafts().then(setDrafts).catch(reportError);
-    }, [repo]),
-  );
   const active = drafts.find((d) => d.id === activeId);
   function update(draft: ImportDraft) {
     setDrafts((old) => old.map((d) => (d.id === draft.id ? draft : d)));
     repo.saveDraft(draft).catch(reportError);
   }
-  async function add(kind: ImportDraft["kind"]) {
-    setBusy(true);
-    try {
-      nativeApi(); // Fail before opening the picker if this is Expo Go.
-      const picked = await Picker.launchImageLibraryAsync({
-        mediaTypes: ["images"],
-        allowsMultipleSelection: true,
-        quality: 1,
-        selectionLimit: 30,
-      });
-      if (picked.canceled) return;
-      const errors: string[] = [];
-      for (const [index, asset] of picked.assets.entries()) {
-        setProgress(`Leyendo imagen ${index + 1} de ${picked.assets.length}…`);
-        try {
-          const imageUri = await keepImage(
-            asset.uri,
-            asset.width,
-            asset.height,
+  const add = useCallback(
+    async (kind: ImportDraft["kind"]) => {
+      setBusy(true);
+      try {
+        nativeApi(); // Fail before opening the picker if this is Expo Go.
+        const { errors } = await pickAndImportImages(kind, {
+          pick: (options) => Picker.launchImageLibraryAsync(options),
+          keepImage: (asset) => keepImage(asset.uri, asset.width, asset.height),
+          recognize: (uri) => nativeApi().recognize(uri),
+          makeId: () => uuid.v4(),
+          saveDraft: (draft) => repo.saveDraft(draft),
+          onDraft: (draft) => {
+            setDrafts((old) => [...old, draft]);
+            setActiveId(draft.id);
+          },
+          onProgress: (index, total) =>
+            setProgress(`Leyendo imagen ${index} de ${total}…`),
+        });
+        setCrop(false);
+        if (errors.length)
+          Alert.alert(
+            "Algunas imágenes no se pudieron leer",
+            errors.join("\n"),
           );
-          const ocr = await nativeApi().recognize(imageUri);
-          const proposal =
-            kind === "table"
-              ? proposeTable(ocr)
-              : { columns: [], rows: [], cells: [] };
-          const fields = parseCard(ocr.tokens.map((t) => t.text).join(" "));
-          const draft: ImportDraft = {
-            id: uuid.v4(),
-            kind,
-            imageUri,
-            ocr,
-            ...proposal,
-            patch: {
-              code: kind === "card" ? (fields.code ?? "") : "",
-              ...(kind === "card" && fields.priceCents !== null
-                ? { priceCents: fields.priceCents }
-                : {}),
-            },
-            reviewed: false,
-          };
-          await repo.saveDraft(draft);
-          setDrafts((old) => [...old, draft]);
-          setActiveId(draft.id);
-        } catch (error) {
-          errors.push(
-            `Imagen ${index + 1}: ${error instanceof Error ? error.message : String(error)}`,
-          );
-        }
+      } catch (error) {
+        reportError(error);
+      } finally {
+        setBusy(false);
+        setProgress("");
       }
-      setCrop(false);
-      if (errors.length)
-        Alert.alert("Algunas imágenes no se pudieron leer", errors.join("\n"));
-    } catch (error) {
-      reportError(error);
-    } finally {
-      setBusy(false);
-      setProgress("");
-    }
-  }
+    },
+    [repo],
+  );
+  useFocusEffect(
+    useCallback(() => {
+      let canceled = false;
+      (async () => {
+        const stored = await repo.listDrafts();
+        if (canceled) return;
+        setDrafts(stored);
+        if (autoPick === "card" && !openedInitialPicker.current) {
+          openedInitialPicker.current = true;
+          await add("card");
+        }
+      })().catch(reportError);
+      return () => {
+        canceled = true;
+      };
+    }, [repo, autoPick, add]),
+  );
   async function applyCrop(uri: string, width: number, height: number) {
     if (!active) return;
     setBusy(true);
@@ -216,7 +205,7 @@ export default function ImportsScreen() {
           disabled={busy}
         />
         <Button
-          title="Añadir fichas / fotos"
+          title="Cargar varios modelos"
           secondary
           onPress={() => add("card")}
           disabled={busy}
@@ -229,7 +218,9 @@ export default function ImportsScreen() {
       ) : null}
       <Text style={styles.note}>
         Los borradores quedan guardados si cierras la app. Puedes importar
-        marcas por separado.
+        marcas por separado. Selecciona varias fotos y confirma la selección en
+        la galería. Android puede limitar cuántas fotos permite elegir por lote;
+        puedes añadir más después sin perder las anteriores.
       </Text>
       {drafts.map((draft, i) => (
         <View key={draft.id} style={styles.row}>

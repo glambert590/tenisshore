@@ -117,6 +117,27 @@ export default function ProductScreen() {
       <Text style={styles.title}>
         {existingCode ? `Modelo ${existingCode}` : "Nuevo modelo"}
       </Text>
+      {!existingCode && (
+        <View style={styles.card}>
+          <Button
+            title="Cargar varios modelos a la vez"
+            onPress={() =>
+              router.replace({
+                pathname: "/imports",
+                params: { autoPick: "card" },
+              })
+            }
+            disabled={busy}
+          />
+          <Text style={styles.note}>
+            Selecciona varias fotos de tu catálogo. Cada foto se guardará como
+            una ficha separada para revisar su código, marca y precio.
+          </Text>
+        </View>
+      )}
+      {!existingCode && (
+        <Text style={styles.label}>O añadir un solo modelo manualmente</Text>
+      )}
       {displayed && (
         <Image
           source={{ uri: displayed }}
@@ -126,7 +147,7 @@ export default function ProductScreen() {
         />
       )}
       <Button
-        title="Elegir / recortar foto del producto"
+        title="Elegir foto de este modelo"
         secondary
         onPress={choosePhoto}
         disabled={busy || !loaded}
