@@ -22,7 +22,7 @@ app/ contiene navegación y pantallas; src/domain/ lógica pura; src/data/ persi
 
 ## Estado de implementación
 
-Funciones de las cinco entregas implementadas en `feature/tenisshore-v1`: catálogo, OCR nativo y revisión geométrica, borradores, actualización transaccional, búsqueda, WhatsApp, copias y configuración APK/CI. Los checks anteriores se mantienen pendientes de aceptación integral hasta ejecutar la guía física en `docs/acceptance.md` y publicar la PR.
+Funciones de las cinco entregas implementadas en `feature/tenisshore-v1`: catálogo, OCR nativo y revisión geométrica, borradores, actualización transaccional, búsqueda, WhatsApp, copias y configuración APK/CI. La [PR #1](https://github.com/glambert590/tenisshore/pull/1) está publicada como borrador hacia `development`. Los checks anteriores se mantienen pendientes de aceptación integral hasta ejecutar la guía física en `docs/acceptance.md`.
 
 Revisión independiente realizada. Se corrigieron escalado nativo con divisor cero, persistencia de precios sin confirmar, validación de fotos restauradas y contradicciones entre marcas de fichas/tablas. Hay pruebas de regresión para esas reglas; los tests de archivos/SQL no sustituyen la prueba física de OCR ni WhatsApp.
 

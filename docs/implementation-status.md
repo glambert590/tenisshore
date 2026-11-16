@@ -15,10 +15,13 @@ Revisión independiente: corregidos divisor cero al decodificar imágenes, pérd
 - Tests Node con `--test-isolation=none`: el aislamiento por proceso del entorno no ejecutaba los subtests. Con este ajuste se enumeran y ejecutan las 27 pruebas reales.
 - No se atribuye precisión OCR ni rendimiento físico: los adjuntos de la conversación no estaban accesibles como archivos y no había un teléfono conectado. La aceptación continúa pendiente.
 
+## Publicación
+
+El acceso de escritura quedó habilitado. La rama `feature/tenisshore-v1` está publicada y la [PR #1](https://github.com/glambert590/tenisshore/pull/1) está abierta como borrador hacia `development`. El bloqueo 403 registrado durante la implementación quedó resuelto.
+
 ## Pendientes
 
 - Completar [aceptación física](acceptance.md): fotos originales, modo avión, WhatsApp real, rendimiento y recuperación en el dispositivo del gestor.
-- GitHub rechazó `create_branch` y `git push` con 403. No se publicó rama ni PR; `development` sigue siendo la base elegida. Hace falta corregir la escritura de la integración antes de reintentar.
 - Vincular EAS con la cuenta del usuario y gestionar firma propia para distribuir versiones estables. La APK de prueba usa otra firma; exportar copia de datos antes de cambiar instalaciones.
 
 No se fusionaron cambios a `development` ni a `main`.
