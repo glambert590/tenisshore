@@ -5,6 +5,12 @@ on:
     branches: [feature/tenisshore-v1]
     paths:
       - .github/workflows/preview-apk.yml
+      - 'app/**'
+      - 'src/**'
+      - 'modules/**'
+      - app.json
+      - package.json
+      - package-lock.json
   workflow_dispatch:
 
 permissions:

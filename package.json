@@ -1,7 +1,7 @@
 {
   "name": "tenisshore",
   "license": "UNLICENSED",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "expo-router/entry",
   "dependencies": {
     "expo": "~55.0.32",

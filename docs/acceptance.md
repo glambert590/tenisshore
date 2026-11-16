@@ -15,6 +15,9 @@ Si la lectura no aporta suficiente ahorro frente a transcribir, detener la acept
 
 ## Catálogo y disponibilidad
 
+- En «Nuevo modelo», pulsar «Cargar varios modelos a la vez»: debe abrir la galería en selección múltiple. Seleccionar más de 30 fotos si Android lo permite, comprobar una ficha por foto y que cancelar no borre los borradores anteriores. Volver a la pantalla no debe reabrir automáticamente la galería.
+- La app no impone un máximo de fotos por selección; el selector de Android puede hacerlo. Añadir otro lote debe conservar el anterior. La foto de un modelo individual sigue permitiendo recorte sin activar carga múltiple.
+
 - Cargar 500 modelos con fotos. Medir búsqueda, desplazamiento y memoria con Android Studio Profiler; comprobar que las importaciones procesan una imagen a la vez.
 - Buscar Adidas talla 36 y comparar resultados con la tabla confirmada. Probar 36.5 sin incluir talla 36.
 - Importar solo Adidas y solo algunas filas: conservar Nike y filas fuera de alcance. Verificar que fotos y precios existentes no se borran.
