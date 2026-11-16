@@ -41,6 +41,7 @@ yarn-error.*
 /android
 .superpowers/
 *.apk
+*.apk.sha256
 *.zip
 .env*
 **/build/

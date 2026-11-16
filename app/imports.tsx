@@ -1,6 +1,6 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { Alert, Image, Text, View } from "react-native";
-import { useFocusEffect, useLocalSearchParams } from "expo-router";
+import { useFocusEffect } from "expo-router";
 import * as Picker from "expo-image-picker";
 import * as FS from "expo-file-system/legacy";
 import { uuid } from "expo-modules-core";
@@ -30,8 +30,6 @@ import {
 
 export default function ImportsScreen() {
   const repo = useCatalog();
-  const { autoPick } = useLocalSearchParams<{ autoPick?: string }>();
-  const openedInitialPicker = useRef(false);
   const [drafts, setDrafts] = useState<ImportDraft[]>([]),
     [activeId, setActiveId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false),
@@ -82,15 +80,11 @@ export default function ImportsScreen() {
         const stored = await repo.listDrafts();
         if (canceled) return;
         setDrafts(stored);
-        if (autoPick === "card" && !openedInitialPicker.current) {
-          openedInitialPicker.current = true;
-          await add("card");
-        }
       })().catch(reportError);
       return () => {
         canceled = true;
       };
-    }, [repo, autoPick, add]),
+    }, [repo]),
   );
   async function applyCrop(uri: string, width: number, height: number) {
     if (!active) return;
@@ -193,10 +187,10 @@ export default function ImportsScreen() {
   }
   return (
     <Screen>
-      <Text style={styles.title}>De fotos a catálogo</Text>
+      <Text style={styles.title}>Fotos y pendientes</Text>
       <Text style={styles.subtitle}>
-        Importa las fichas para fotos y precios, y las tablas para
-        disponibilidad. Revisa antes de guardar.
+        Revisa las fotos guardadas o añade un nuevo lote cuando lo necesites. La
+        galería se abre al pulsar uno de los botones de abajo.
       </Text>
       <View style={styles.row}>
         <Button
@@ -205,7 +199,7 @@ export default function ImportsScreen() {
           disabled={busy}
         />
         <Button
-          title="Cargar varios modelos"
+          title="Añadir fotos"
           secondary
           onPress={() => add("card")}
           disabled={busy}

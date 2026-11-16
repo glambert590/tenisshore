@@ -120,18 +120,13 @@ export default function ProductScreen() {
       {!existingCode && (
         <View style={styles.card}>
           <Button
-            title="Cargar varios modelos a la vez"
-            onPress={() =>
-              router.replace({
-                pathname: "/imports",
-                params: { autoPick: "card" },
-              })
-            }
+            title="Fotos y pendientes"
+            onPress={() => router.replace("/imports")}
             disabled={busy}
           />
           <Text style={styles.note}>
-            Selecciona varias fotos de tu catálogo. Cada foto se guardará como
-            una ficha separada para revisar su código, marca y precio.
+            Revisa lo que falta por guardar o entra para añadir varias fotos de
+            tu catálogo. Tú eliges cuándo abrir la galería.
           </Text>
         </View>
       )}
@@ -187,6 +182,12 @@ export default function ProductScreen() {
         />
         <Text style={styles.label}>Disponibilidad confirmada</Text>
       </View>
+      {original?.updatedAt && (
+        <Text style={styles.note}>
+          Última actualización:{" "}
+          {new Date(original.updatedAt).toLocaleString("es")}
+        </Text>
+      )}
       <Field
         label="Tallas disponibles, separadas por espacios"
         value={sizes}

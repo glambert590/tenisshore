@@ -15,7 +15,9 @@ Si la lectura no aporta suficiente ahorro frente a transcribir, detener la acept
 
 ## Catálogo y disponibilidad
 
-- En «Nuevo modelo», pulsar «Cargar varios modelos a la vez»: debe abrir la galería en selección múltiple. Seleccionar más de 30 fotos si Android lo permite, comprobar una ficha por foto y que cancelar no borre los borradores anteriores. Volver a la pantalla no debe reabrir automáticamente la galería.
+- Desde el inicio o «Nuevo modelo», entrar en «Fotos y pendientes»: debe mostrar borradores guardados sin abrir la galería. Pulsar «Añadir fotos» debe abrir selección múltiple. Seleccionar más de 30 fotos si Android lo permite, comprobar una ficha por foto y que cancelar no borre los borradores anteriores. Volver a la pantalla no debe reabrir la galería.
+- Verificar el contador «Pendientes» del inicio tras añadir, aplicar o descartar borradores. Revisados pero todavía sin guardar también cuentan como pendientes.
+- En el catálogo, comprobar dos columnas en tamaño de texto normal y una en pantallas estrechas o con texto ampliado. Buscar por código/talla, filtrar por marca, limpiar filtros, seleccionar uno/varios y compartir por WhatsApp. La ficha debe conservar el precio, tallas y fecha de actualización.
 - La app no impone un máximo de fotos por selección; el selector de Android puede hacerlo. Añadir otro lote debe conservar el anterior. La foto de un modelo individual sigue permitiendo recorte sin activar carga múltiple.
 
 - Cargar 500 modelos con fotos. Medir búsqueda, desplazamiento y memoria con Android Studio Profiler; comprobar que las importaciones procesan una imagen a la vez.

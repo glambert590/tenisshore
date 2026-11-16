@@ -10,6 +10,8 @@ Catálogo Android para un gestor de ventas de tenis. Desarrollado con Expo SDK 5
 - Corregir perspectiva, calibrar filas/columnas y editar las celdas antes de aplicar cambios.
 - Guardar borradores, exportar una copia ZIP con fotos y restaurarla tras validar datos e imágenes.
 
+Desde **Fotos y pendientes** puedes revisar las importaciones guardadas sin abrir la galería. El selector se abre únicamente al pulsar **Añadir fotos** o **Añadir tablas**. El inicio incluye un contador con acceso a esos pendientes; el catálogo permite seleccionar modelos por casilla y compartirlos por WhatsApp.
+
 En una fila **37**, `X` significa solo **37** y `X ½` significa solo **37.5**. Una celda vacía confirmada elimina ambas. Lo ilegible queda pendiente. Importar Adidas no modifica Nike; tampoco se borran filas fuera de las revisadas. Los códigos son texto: `64.10` y `64.1` son distintos.
 
 ## Estado de validación
@@ -28,6 +30,8 @@ npm run lint
 npx expo prebuild --platform android
 npm run android
 ```
+
+`npm test` ejecuta las pruebas de dominio/SQLite y las pruebas de pantallas con Jest/React Native Testing Library. También puedes usar `npm run test:unit` o `npm run test:ui` por separado.
 
 El módulo local `modules/tenisshore-native` usa ML Kit latino incluido en la APK, sin descargar el modelo al primer uso. No infiere marcas desde logos. La detección geométrica propone filas/columnas, no garantiza interpretar automáticamente cualquier tabla. Puedes ajustar códigos, marcas y centros de filas/columnas desde la revisión.
 
