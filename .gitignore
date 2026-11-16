@@ -43,3 +43,6 @@ yarn-error.*
 *.apk
 *.zip
 .env*
+**/build/
+.gradle/
+.cxx/
