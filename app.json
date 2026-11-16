@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "Tenisshore",
+    "slug": "tenisshore",
+    "scheme": "tenisshore",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "android": {
+      "package": "com.glambert590.tenisshore",
+      "allowBackup": false
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Selecciona fotos del catálogo o tablas de disponibilidad.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
+      ],
+      [
+        "react-native-share",
+        {
+          "android": [
+            "com.whatsapp",
+            "com.whatsapp.w4b"
+          ]
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

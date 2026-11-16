@@ -1,0 +1,33 @@
+name: Checks
+on:
+  pull_request:
+    branches: [development, main]
+  push:
+    branches: ['feature/**']
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      EXPO_NO_TELEMETRY: '1'
+    steps:
+      - name: Require development before main
+        if: github.event_name == 'pull_request' && github.base_ref == 'main' && github.head_ref != 'development'
+        run: |
+          echo 'Las PR a main deben venir de development.'
+          exit 1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npx expo prebuild --platform android --no-install
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: ./gradlew :tenisshore-native:testDebugUnitTest :app:assembleDebug --no-daemon
+        working-directory: android

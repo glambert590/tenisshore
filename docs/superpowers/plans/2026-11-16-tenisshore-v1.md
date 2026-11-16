@@ -19,3 +19,11 @@ Pruebas de dominio y persistencia: X/37, X½/37.5, vacío vs incierto, códigos 
 ## Estructura
 
 app/ contiene navegación y pantallas; src/domain/ lógica pura; src/data/ persistencia; src/services/ integración nativa y archivos; src/components/ revisión de imágenes y controles. modules/tenisshore-native/ es el módulo Expo local. tests/ cubre lógica y persistencia real.
+
+## Estado de implementación
+
+Funciones de las cinco entregas implementadas en `feature/tenisshore-v1`: catálogo, OCR nativo y revisión geométrica, borradores, actualización transaccional, búsqueda, WhatsApp, copias y configuración APK/CI. Los checks anteriores se mantienen pendientes de aceptación integral hasta ejecutar la guía física en `docs/acceptance.md` y publicar la PR.
+
+Revisión independiente realizada. Se corrigieron escalado nativo con divisor cero, persistencia de precios sin confirmar, validación de fotos restauradas y contradicciones entre marcas de fichas/tablas. Hay pruebas de regresión para esas reglas; los tests de archivos/SQL no sustituyen la prueba física de OCR ni WhatsApp.
+
+Expo SDK 55 se eligió para poder compilar con Android SDK 36 disponible, en lugar de la plantilla SDK 58 que exigía API 37 no disponible en el entorno. El repositorio solo tenía README y no existía una base de pruebas previa.
